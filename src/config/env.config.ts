@@ -12,7 +12,7 @@ const envVarsSchema = Joi.object()
   .keys({
     PORT: Joi.number().required().description("Backend Port"),
     NODE_ENV: Joi.string().required().description("Node Environment"),
-    DB_HOSTNAME: Joi.string().required().description("Database host name"),
+    DB_HOST: Joi.string().required().description("Database host name"),
     DB_PORT: Joi.number().default(5432).description("Database port"),
     DB_NAME: Joi.string().required().description("Database name"),
     DB_USERNAME: Joi.string().required().description("Database user name"),
@@ -42,7 +42,7 @@ if (error) {
 const config = {
   port: envVars.PORT,
   node_env: envVars.NODE_ENV,
-  db_host: envVars.DB_HOSTNAME,
+  db_host: envVars.DB_HOST,
   db_port: envVars.DB_PORT,
   db_name: envVars.DB_NAME,
   db_username: envVars.DB_USERNAME,
