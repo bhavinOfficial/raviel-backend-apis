@@ -1,0 +1,53 @@
+# dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.*
+!.env.example
+
+# build output
+dist/
+build/
+out/
+coverage/
+
+# cache
+.cache/
+.eslintcache
+.npm
+.yarn/
+
+# logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.swp
+
+# TypeScript
+*.tsbuildinfo
+
+# Testing
+.nyc_output/
+
+# Docker
+.dockerignore
+
+# Netlify
+.netlify/
+
+# Temporary files
+tmp/
+temp/

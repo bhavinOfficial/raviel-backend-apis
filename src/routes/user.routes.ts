@@ -1,0 +1,418 @@
+import express from "express";
+import userController from "../controllers/user.controller";
+import { enums } from "../common/constants";
+import auth from "../middlewares/auth.middleware";
+const router = express.Router();
+
+//? POST
+/**
+ * @openapi
+ * /user/register:
+ *    post:
+ *      tags:
+ *      - User
+ *      summary: User-Registration
+ *      description: This is the API for register user.
+ *      operationId: User-Registration
+ *      deprecated: false
+ *      security: []
+ *      parameters: []
+ *      requestBody:
+ *        description: 'Request body payload'
+ *        content:
+ *          application/json:
+ *            schema:
+ *              allOf:
+ *              - $ref: '#/components/schemas/User-Registration-Request'
+ *              - example:
+ *                  firstName: John
+ *                  lastName: Doe
+ *                  email: john.doe@example.com
+ *                  role: partner
+ *                  password: User@123
+ *                  mobile: "9999966666"
+ *            example:
+ *              firstName: John
+ *              lastName: Doe
+ *              email: john.doe@example.com
+ *              role: partner
+ *              password: User@123
+ *              mobile: "9999966666"
+ *        required: true
+ *      responses:
+ *        201:
+ *          description: Created
+ *          headers: {}
+ *          content:
+ *            application/json; charset=utf-8:
+ *              schema:
+ *                allOf:
+ *                - $ref: '#/components/schemas/User-Registration-Response'
+ *                - example:
+ *                    success: true
+ *                    status: 201
+ *                    message: User created successfully.
+ *                    payload:
+ *                      id: a9201deb-ca29-476f-99f8-2e740f4639ca
+ *                      firstName: John
+ *                      lastName: Doe
+ *                      email: john.doe@example.com
+ *                      mobile: "9999966666"
+ *                      isActive: true
+ *                      lastLoginDate: null
+ *                      createdAt: 2026-01-02T15:14:43.408Z
+ *                      updatedAt: 2026-01-02T15:14:43.409Z
+ * components:
+ *   schemas:
+ *    User-Registration-Request:
+ *      required:
+ *      title: User-Registration-Request
+ *        - firstName
+ *        - lastName
+ *        - email
+ *        - role
+ *        - password
+ *        - mobile
+ *      type: object
+ *      properties:
+ *        firstName:
+ *          type: string
+ *        lastName:
+ *          type: string
+ *        email:
+ *          type: string
+ *        role:
+ *          type: string
+ *        password:
+ *          type: string
+ *        mobile:
+ *          type: string
+ *      example:
+ *        firstName: John
+ *        lastName: Doe
+ *        email: john.doe@example.com
+ *        role: partner
+ *        password: User@123
+ *        mobile: "9999966666"
+ *    User-Registration-Response:
+ *      title: User-Registration-Response
+ *      required:
+ *      - success
+ *      - status
+ *      - message
+ *      - payload
+ *      type: object
+ *      properties:
+ *        success:
+ *          type: boolean
+ *        status:
+ *          type: integer
+ *          format: int32
+ *        message:
+ *          type: string
+ *        payload:
+ *          allOf:
+ *          - $ref: '#/components/schemas/User-Registration-Response-Payload'
+ *          - {}
+ *      example:
+ *        success: true
+ *        status: 201
+ *        message: User created successfully.
+ *        payload:
+ *          id: a9201deb-ca29-476f-99f8-2e740f4639ca
+ *          firstName: John
+ *          lastName: Doe
+ *          email: john.doe@example.com
+ *          mobile: "9999966666"
+ *          isActive: true
+ *          lastLoginDate: null
+ *          createdAt: 2026-01-02T15:14:43.408Z
+ *          updatedAt: 2026-01-02T15:14:43.409Z
+ *    User-Registration-Response-Payload:
+ *      title: User-Registration-Response-Payload
+ *      required:
+ *      - id
+ *      - firstName
+ *      - lastName
+ *      - email
+ *      - mobile
+ *      - isActive
+ *      - lastLoginDate
+ *      - createdAt
+ *      - updatedAt
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: string
+ *        firstName:
+ *          type: string
+ *        lastName:
+ *          type: string
+ *        email:
+ *          type: string
+ *        mobile:
+ *          type: string
+ *        isActive:
+ *          type: boolean
+ *        lastLoginDate:
+ *          type: string
+ *          nullable: true
+ *        createdAt:
+ *          type: string
+ *        updatedAt:
+ *          type: string
+ *          nullable: true
+ *      example:
+ *        id: a9201deb-ca29-476f-99f8-2e740f4639ca
+ *        firstName: John
+ *        lastName: Doe
+ *        email: john.doe@example.com
+ *        mobile: "9999966666"
+ *        isActive: true
+ *        lastLoginDate: null
+ *        createdAt: 2026-01-02T15:14:43.408Z
+ *        updatedAt: 2026-01-02T15:14:43.409Z
+ */
+//* Register user API
+router.post(
+  "/register",
+  userController.registerUser.validation,
+  userController.registerUser.handler
+);
+
+//? POST
+/**
+ * @openapi
+ * /user/login:
+ *    post:
+ *      tags:
+ *      - User
+ *      summary: User-Login
+ *      description: This is the API for user login.
+ *      operationId: User-Login
+ *      deprecated: false
+ *      security: []
+ *      parameters: []
+ *      requestBody:
+ *        description: 'Request body payload'
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                email:
+ *                  type: string
+ *                  example: john.doe@example.com
+ *                password:
+ *                  type: string
+ *                  example: User@123
+ *              required:
+ *                - email
+ *                - password
+ *        required: true
+ *      responses:
+ *        200:
+ *          description: OK
+ *          headers: {}
+ *          content:
+ *            application/json; charset=utf-8:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    example: true
+ *                  status:
+ *                    type: integer
+ *                    format: int32
+ *                    example: 200
+ *                  message:
+ *                    type: string
+ *                    example: User logged in successfully.
+ *                  payload:
+ *                    type: object
+ *                    properties:
+ *                      accessToken:
+ *                        type: string
+ *                        example: "eyJhbGciOiJIUzI1NiIsInw5cCI6skpXVCJ9.eyJpZCI6IjIyM2ExYTZjLTY3NDUtNGFmMi05OWVkLWE3YjZlNDA1MTY2ZCIsImVtYWlsIjoiam9obi5kb2UxMkBleGFtcGxlLmNvbSIsInJvbGUiOiJwYXJ0bmVyIiwiaWF0IjoxNzY3ODQ1NTUyLCJleHAiOjE3Njg0NTAzNTJ9.UKoiGrKI0nkoYqLF5Vs9AP0tLxZB_OQPEE_MvS-2jrE"
+ */
+//* login user API
+router.post(
+  "/login",
+  userController.loginUser.validation,
+  userController.loginUser.handler
+);
+
+//? PUT
+/**
+ * @openapi
+ * /user:
+ *    put:
+ *      tags:
+ *      - User
+ *      summary: Update-User
+ *      description: This is the API for update logged in user.
+ *      operationId: User-Update
+ *      deprecated: false
+ *      security:
+ *        - bearerAuth: []
+ *      parameters: []
+ *      requestBody:
+ *        description: 'Request body payload'
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                firstName:
+ *                  type: string
+ *                  example: John1
+ *                lastName:
+ *                  type: string
+ *                  example: Doe1
+ *                mobile:
+ *                  type: string
+ *                  example: 9977665544
+ *        required: true
+ *      responses:
+ *        200:
+ *          description: OK
+ *          headers: {}
+ *          content:
+ *            application/json; charset=utf-8:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    example: true
+ *                  status:
+ *                    type: integer
+ *                    format: int32
+ *                    example: 200
+ *                  message:
+ *                    type: string
+ *                    example: User Updated successfully.
+ *                  payload:
+ *                    type: object
+ *                    properties:
+ *                      id:
+ *                        type: string
+ *                        example: "a9201deb-ca29-476f-99f8-2e740f4639ca"
+ *                      firstName:
+ *                        type: string
+ *                        example: John
+ *                      lastName:
+ *                        type: string
+ *                        example: Doe
+ *                      email:
+ *                        type: string
+ *                        example: "john.doe@example.com"
+ *                      mobile:
+ *                        type: string
+ *                        example: "9977665544"
+ *                      isActive:
+ *                        type: boolean
+ *                        example: true
+ *                      lastLoginDate:
+ *                        type: string
+ *                        nullable: true
+ *                        example: null
+ *                      createdAt:
+ *                        type: string
+ *                        example: 2026-01-02T15:14:43.408Z
+ *                      updatedAt:
+ *                        type: string
+ *                        nullable: true
+ *                        example: 2026-01-02T15:14:43.409Z
+ */
+//* Update user API
+router.put(
+  "/",
+  auth({
+    isTokenRequired: true,
+    usersAllowed: [enums.ROLE.PARTNER, enums.ROLE.SELLER],
+  }),
+  userController.updateUser.validation,
+  userController.updateUser.handler
+);
+
+//? GET
+/**
+ * @openapi
+ * /user:
+ *    get:
+ *      tags:
+ *      - User
+ *      summary: Fetch-User
+ *      description: This is the API for fetch logged in user.
+ *      operationId: User-Fetch
+ *      deprecated: false
+ *      security:
+ *        - bearerAuth: []
+ *      parameters: []
+ *      requestBody: []
+ *      responses:
+ *        200:
+ *          description: OK
+ *          headers: {}
+ *          content:
+ *            application/json; charset=utf-8:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    example: true
+ *                  status:
+ *                    type: integer
+ *                    format: int32
+ *                    example: 200
+ *                  message:
+ *                    type: string
+ *                    example: User details fetched successfully.
+ *                  payload:
+ *                    type: object
+ *                    properties:
+ *                      id:
+ *                        type: string
+ *                        example: "a9201deb-ca29-476f-99f8-2e740f4639ca"
+ *                      firstName:
+ *                        type: string
+ *                        example: John
+ *                      lastName:
+ *                        type: string
+ *                        example: Doe
+ *                      email:
+ *                        type: string
+ *                        example: "john.doe@example.com"
+ *                      mobile:
+ *                        type: string
+ *                        example: "9977665544"
+ *                      isActive:
+ *                        type: boolean
+ *                        example: true
+ *                      lastLoginDate:
+ *                        type: string
+ *                        nullable: true
+ *                        example: null
+ *                      createdAt:
+ *                        type: string
+ *                        example: 2026-01-02T15:14:43.408Z
+ *                      updatedAt:
+ *                        type: string
+ *                        nullable: true
+ *                        example: 2026-01-02T15:14:43.409Z
+ */
+//* Fetch logged in User API
+router.get(
+  "/",
+  auth({
+    isTokenRequired: true,
+    usersAllowed: [enums.ROLE.PARTNER, enums.ROLE.SELLER],
+  }),
+  userController.getLoggedInUserDetails.validation,
+  userController.getLoggedInUserDetails.handler
+);
+
+export default router;
