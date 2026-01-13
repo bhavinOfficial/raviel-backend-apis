@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://raviel.netlify.app", "https://raviel-partner-panel.netlify.app"],
   })
 );
 
@@ -35,22 +35,8 @@ const swaggerOptions: SwaggerOptions = {
       description: "Raviel backend APIs documentation",
     },
     servers: [
-      // {
-      //   url: config.swagger_url,
-      //   description: "Production server",
-      // },
-      // {
-      //   url: `http://localhost:${port}/raviel/api/v1`,
-      //   description: "Development server",
-      //   default: true,
-      // },
       {
-        url:
-          config.node_env === "development"
-            ? // ? `http://localhost:${port}/raviel/api/v1`
-              // `https://tlvwd35l-8000.inc1.devtunnels.ms/raviel/api/v1`
-              ` https://egestive-shapely-klara.ngrok-free.dev/raviel/api/v1`
-            : config.swagger_url,
+        url: config.swagger_url,
         description: `${
           config.node_env === "development" ? "Development" : "Production"
         } server`,
@@ -79,20 +65,20 @@ const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 //* Swagger UI
 app.use(
-  "/raviel/api-docs",
+  "/api-docs",
   serve,
   setup(swaggerDocs, {
     customSiteTitle: "Raviel API Documentation",
   })
 );
 
-app.get("/raviel/docs.json", (req, res) => {
+app.get("/docs.json", (req, res) => {
   res.setHeader("Content-Type", "application/json");
   res.send(swaggerDocs);
 });
 
 //* API routes
-app.use("/raviel/api/v1", router);
+app.use("/api/v1", router);
 
 //* Error Handling
 app.use(errorHandler);
