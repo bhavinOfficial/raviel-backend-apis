@@ -273,6 +273,30 @@ router.post(
  *                phoneNumber:
  *                  type: string
  *                  example: 9977665544
+ *                businessName:
+ *                  type: string
+ *                  example: Doe Manufacturing India Pvt Ltd
+ *                gstNumber:
+ *                  type: string
+ *                  example: 27ABCDE1234F1Z5
+ *                gstAddress:
+ *                  type: string
+ *                  example: Plot No. 45, MIDC Industrial Area, Andheri East, Mumbai, Maharashtra - 400093
+ *                manufacturerNumber:
+ *                  type: string
+ *                  example: MFG-IND-458921
+ *                fullFillerNumber:
+ *                  type: string
+ *                  example: FUL-IND-774512
+ *                pickupAddress:
+ *                  type: string
+ *                  example: Warehouse No. 12, Bhiwandi Logistics Park, Thane, Maharashtra - 421302 
+ *                businessType:
+ *                  type: string
+ *                  example: Manufacturer
+ *                pancardNumber:
+ *                  type: string
+ *                  example: ABCDE1234F
  *        required: true
  *      responses:
  *        200:
@@ -295,36 +319,7 @@ router.post(
  *                    example: User Updated successfully.
  *                  payload:
  *                    type: object
- *                    properties:
- *                      id:
- *                        type: string
- *                        example: "a9201deb-ca29-476f-99f8-2e740f4639ca"
- *                      firstName:
- *                        type: string
- *                        example: John
- *                      lastName:
- *                        type: string
- *                        example: Doe
- *                      email:
- *                        type: string
- *                        example: "john.doe@example.com"
- *                      phoneNumber:
- *                        type: string
- *                        example: "9977665544"
- *                      isActive:
- *                        type: boolean
- *                        example: true
- *                      lastLoginDate:
- *                        type: string
- *                        nullable: true
- *                        example: null
- *                      createdAt:
- *                        type: string
- *                        example: 2026-01-02T15:14:43.408Z
- *                      updatedAt:
- *                        type: string
- *                        nullable: true
- *                        example: 2026-01-02T15:14:43.409Z
+ *                    example: {}
  */
 //* Update user API
 router.put(

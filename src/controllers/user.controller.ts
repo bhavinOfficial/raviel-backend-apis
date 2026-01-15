@@ -95,6 +95,20 @@ const userController = {
           .messages({
             "string.pattern.base": "Phone number number must be exactly 10 digits",
           }),
+        businessName: Joi.string().optional(),
+        gstNumber: Joi.string().pattern(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/)
+          .messages({
+            "string.pattern.base": "Invalid GST number format",
+          }).optional(),
+        gstAddress: Joi.string().optional(),
+        manufacturerNumber: Joi.string().optional(),
+        fullFillerNumber: Joi.string().optional(),
+        pickupAddress: Joi.string().optional(),
+        businessType: Joi.string().optional(),
+        pancardNumber: Joi.string().pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)
+          .messages({
+            "string.pattern.base": "Invalid PAN card number format",
+          }).optional()
       }),
     }),
     handler: async (req: any, res: Response) => {
@@ -112,7 +126,7 @@ const userController = {
       return ApiResponse.OK({
         res,
         message: "User Updated successfully.",
-        payload: user,
+        payload: {},
       });
     },
   },
