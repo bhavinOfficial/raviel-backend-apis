@@ -168,7 +168,6 @@ const partnerController = {
     handler: async (req: any, res: Response) => {
 
       const sellersAddedByPartner: any = await partnerService.addSellersByPartnerUsingFile(req);
-      console.log("🚀 ~ sellersAddedByPartner:", sellersAddedByPartner)
 
       if (!sellersAddedByPartner)
         return ApiResponse.BAD_REQUEST({

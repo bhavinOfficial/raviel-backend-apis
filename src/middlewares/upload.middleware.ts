@@ -3,7 +3,6 @@ import fs from "fs";
 import path from "path";
 
 const uploadDir = path.join(process.cwd(), "public");
-console.log("🚀 ~ uploadDir:", uploadDir)
 
 
 // ✅ Create folder if it does not exist
@@ -16,7 +15,6 @@ const storage = multer.diskStorage({
     cb(null, uploadDir)
   },
   filename: function (req, file, cb) {
-    console.log("🚀 ~ file begin:", file)
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
     cb(null, `${file.fieldname}-${uniqueSuffix}-${file.originalname}`)
   }

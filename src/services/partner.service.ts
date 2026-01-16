@@ -63,7 +63,6 @@ const partnerService = {
 
   fetchAllSellersAddedByPartner: async (req: any) => {
     let sellersData = await partnerRepository.fetchAllSellersAddedByPartner(req.user.id);
-    console.log("🚀 ~ sellersData:", sellersData)
 
     sellersData = sellersData.map((seller: any) => ({
       ...seller,
@@ -74,7 +73,6 @@ const partnerService = {
   },
 
   addSellersByPartnerUsingFile: async (req: any) => {
-    console.log("req.file: ", req.file);
 
     if (!req.file) {
       return "Please provide a excel file to upload data!"
@@ -85,7 +83,6 @@ const partnerService = {
     let eventsData: any[] = [];
 
     let workBook: xlsx.WorkBook;
-    // console.log("🚀 ~ workBook: ", workBook)
 
     if (req.file.mimetype === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
       workBook = xlsx.readFile(filePath);
@@ -96,25 +93,19 @@ const partnerService = {
       return "Unsupported file format. Please upload an XLSX or CSV file.";
     }
 
-    console.log("🚀 ~ workBook after: ", workBook)
 
     const sheetName = workBook.SheetNames[0];
-    console.log("🚀 ~ sheetName: ", sheetName)
 
     const sheet = workBook.Sheets[sheetName];
-    console.log("🚀 ~ sheet: ", sheet)
 
     const data: any[] = xlsx.utils.sheet_to_json(sheet);
-    console.log("🚀 ~ data: ", data)
 
     if (!data.length) {
       return "No data found in the uploaded file!";
     }
-    console.log("🚀 ~ data after: ", data)
 
 
     const ifEmptySpaceAvailableInData = data.find((item: any) => Object.keys(item).some((key: string) => key.includes("__EMPTY_")));
-    console.log("🚀 ~ ifEmptySpaceAvailableInData:", ifEmptySpaceAvailableInData)
 
 
     if (!ifEmptySpaceAvailableInData) {
@@ -122,7 +113,6 @@ const partnerService = {
     } else {
       eventsData = data.map((item: any) => {
         const emptyKeyNames = Object.keys(item);
-        console.log("🚀 ~ emptyKeyNames:", emptyKeyNames)
         return {
           sellerId: item[emptyKeyNames[0]],
           sellerName: item[emptyKeyNames[1]],
@@ -140,7 +130,6 @@ const partnerService = {
       }).filter((_, index) => index > 0);
     }
 
-    console.log("🚀 ~ eventsData:", eventsData)
 
     eventsData = eventsData.map((event: any) => {
       if (event.launchingDate) {
@@ -178,8 +167,6 @@ const partnerService = {
         partnerId: req.user.id
       };
     });
-
-    console.log("eventsData: last and final ", eventsData);
 
     const errorDatas: any = [];
 
@@ -240,8 +227,6 @@ const partnerService = {
         }
       }
     });
-
-    console.log("errorDatas: ", errorDatas);
 
     const sellerIdsToExtract: any = [];
 

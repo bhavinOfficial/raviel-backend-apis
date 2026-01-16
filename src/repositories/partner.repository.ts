@@ -83,7 +83,6 @@ const partnerRepository = {
         "productCategories",
       ],
     });
-    console.log("🚀 ~ addedSellers:", addedSellers)
     return addedSellers;
   },
 };

@@ -176,6 +176,10 @@ const router = express.Router();
 //* Register user API
 router.post(
   "/register",
+  auth({
+    isTokenRequired: false,
+    usersAllowed: [],
+  }),
   userController.registerUser.validation,
   userController.registerUser.handler
 );
@@ -239,6 +243,10 @@ router.post(
 //* login user API
 router.post(
   "/login",
+  auth({
+    isTokenRequired: false,
+    usersAllowed: [],
+  }),
   userController.loginUser.validation,
   userController.loginUser.handler
 );

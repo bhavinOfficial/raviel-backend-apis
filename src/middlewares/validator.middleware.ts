@@ -10,7 +10,6 @@ export const validator = (schema: any) => {
 
         for (let path of paths) {
             const dataForValidation = req[path];
-            console.log("🚀 ~ validator ~ dataForValidation:", dataForValidation)
             const { value, error } = schema[path].validate(dataForValidation, {
                 allowUnknown: false,
                 stripUnknown: true,
@@ -26,7 +25,12 @@ export const validator = (schema: any) => {
                     payload: { accepted_fields: Object.keys(schema[path].describe().keys), context },
                 });
             }
-            req[path] = value;
+            if (path === "query") {
+                Object.assign(req.query, value);
+            } else {
+                req[path] = value;
+            }
+
         }
         next();
     };

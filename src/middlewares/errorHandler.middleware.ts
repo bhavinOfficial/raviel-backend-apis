@@ -37,8 +37,6 @@ const errorHandler = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("🚀 ~ errorHandler ~ err 12312341:", err);
-  console.log("🚀 ~ errorHandler ~ err 12312341:", err.message);
   //* Log error
   logger.warn(
     `ERROR at PATH: [${req.path}] METHOD: [${req.method}] MESSAGE: [${err.message}]`

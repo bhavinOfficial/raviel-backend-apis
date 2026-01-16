@@ -44,12 +44,6 @@ const userBusinessDetailsService = {
 
     if (!user) return message.USER_NOT_FOUND;
 
-    console.log("req.user.role: ", req.user.role);
-    // req.user.role = "seller";
-
-    console.log("req.user.role: ", req.user.role);
-
-
     const dataToUpdate = {
       ...(req.user.role === "partner" ? {
         businessName: req.body.businessName,
@@ -58,7 +52,6 @@ const userBusinessDetailsService = {
       } : req.body)
     };
 
-    console.log("dataToUpdate: ", dataToUpdate);
 
     const updatedData = await userBusinessDetailsRepository.updateUserBusinessDetails(dataToUpdate, req.user.id);
 

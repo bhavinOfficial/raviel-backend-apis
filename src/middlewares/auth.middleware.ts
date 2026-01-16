@@ -39,11 +39,11 @@ const auth = ({ isTokenRequired = true, usersAllowed = [] }: AuthOptions) => {
     )?.replace(/Bearer +/g, "");
 
     //* check if token is required and token is present in the request header or not`
-    if (token === undefined)
-      return ApiResponse.UNAUTHORIZED({
-        res,
-        message: "Access denied. No token provided.",
-      });
+    // if (token === undefined)
+    //   return ApiResponse.UNAUTHORIZED({
+    //     res,
+    //     message: "Access denied. No token provided.",
+    //   });
 
     //* check if token is required and token is present in the request header or not
     if (isTokenRequired && !token)
