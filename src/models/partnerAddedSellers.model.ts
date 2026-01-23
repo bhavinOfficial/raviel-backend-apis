@@ -9,7 +9,6 @@ const PartnerAddedSellers = (sequelize: Sequelize, DataTypes: any) => {
     public partnerId!: UUID;
     public sellerId!: string; // vendor id
     public sellerName!: string; // account holder name
-    public brandName!: string; // account name
     public launchingDate!: string;
     public listingDate!: string;
     public sellerEmailId!: string;
@@ -18,10 +17,17 @@ const PartnerAddedSellers = (sequelize: Sequelize, DataTypes: any) => {
     public brandApproval!: string;
     public gstNumber!: string;
     public trademarkClass!: string;
-    public totalSKUs!: number; 
-    public pendingSKUs!: number;
-    public liveSKUs!: number;
+    public dominantL1AtLaunch!: string; 
+    public SKUsAtLaunch!: number; 
+    public currentSKUsLive!: number;
     public productCategories!: string[];
+    public sellerStatus!: string;
+    public fixedPaymentAmount!: number;
+    public fixedPaymentMonthYear!: string;
+    public fixedPaymentReceivedOrNot!: boolean;
+    public NMVPaymentAmount!: number;
+    public NMVPaymentMonthYear!: string;
+    public NMVPaymentReceivedOrNot!: boolean;
     public createdAt!: Date;
     public updatedAt!: Date | null;
 
@@ -62,11 +68,6 @@ const PartnerAddedSellers = (sequelize: Sequelize, DataTypes: any) => {
         field: "seller_name",
         allowNull: false,
       },
-      brandName: {
-        type: DataTypes.STRING,
-        field: "brand_name",
-        allowNull: false,
-      },
       launchingDate: {
         type: DataTypes.DATEONLY,
         field: "launching_date",
@@ -75,7 +76,7 @@ const PartnerAddedSellers = (sequelize: Sequelize, DataTypes: any) => {
       listingDate: {
         type: DataTypes.DATEONLY,
         field: "listing_date",
-        allowNull: false,
+        allowNull: true,
       },
       sellerEmailId: {
         type: DataTypes.STRING,
@@ -85,48 +86,87 @@ const PartnerAddedSellers = (sequelize: Sequelize, DataTypes: any) => {
       phoneNumber: {
         type: DataTypes.STRING,
         field: "phone_number",
-        allowNull: false,
+        allowNull: true,
       },
       password: {
         type: DataTypes.STRING,
         field: "password",
-        allowNull: false,
+        allowNull: true,
       },
       brandApproval: {
         type: DataTypes.ENUM("pending", "approved"),
         field: "brand_approval",
-        allowNull: false,
+        allowNull: true,
       },
       gstNumber: {
         type: DataTypes.STRING,
         field: "gst_number",
-        allowNull: false
+        allowNull: true
       },
       trademarkClass: {
         type: DataTypes.ENUM("pending", "approved"),
         field: "trademark_class",
-        allowNull: false
+        allowNull: true
       },
-      totalSKUs: {
+      dominantL1AtLaunch: {
+        type: DataTypes.STRING,
+        field: "dominant_L1_at_launch",
+        allowNull: true
+      },
+      SKUsAtLaunch: {
         type: DataTypes.INTEGER,
-        field: "total_skus",
+        field: "SKUs_at_launch",
         defaultValue: 0
       },
-      pendingSKUs: {
+      currentSKUsLive: {
         type: DataTypes.INTEGER,
-        field: "pending_skus",
-        defaultValue: 0
-      },
-      liveSKUs: {
-        type: DataTypes.INTEGER,
-        field: "live_skus",
+        field: "current_SKUs_live",
         defaultValue: 0
       },
       productCategories: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: [],
-        allowNull: false,    
+        allowNull: true,    
         field: "product_categories",
+      },
+      sellerStatus: {
+        type: DataTypes.ENUM("active", "inactive"),
+        allowNull: true,    
+        field: "seller_status",
+      },
+      fixedPaymentAmount: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: true,    
+        field: "fixed_payment_amount",
+      },
+      fixedPaymentMonthYear: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,    
+        field: "fixed_payment_month_year",
+      },
+      fixedPaymentReceivedOrNot: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,    
+        field: "fixed_payment_received_or_not",
+      },
+      NMVPaymentAmount: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: true,    
+        field: "nmv_payment_amount",
+      },
+      NMVPaymentMonthYear: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,    
+        field: "nmv_payment_month_year",
+      },
+      NMVPaymentReceivedOrNot: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,    
+        field: "nmv_payment_received_or_not",
       },
       createdAt: {
         type: DataTypes.DATE,

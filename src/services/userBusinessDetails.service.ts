@@ -18,8 +18,10 @@ const userBusinessDetailsService = {
    const dataToCreate = {
       ...(req.user.role === "partner" ? {
         businessName: req.body.businessName,
-        gstNumber: req.body.gstNumber,
-        gstAddress: req.body.gstAddress
+        ...(req.body.gstNumber && { gstNumber: req.body.gstNumber }),
+        ...(req.body.gstAddress && { gstAddress: req.body.gstAddress }),
+        ...(req.body.managerPhoneNumber && { managerPhoneNumber: req.body.managerPhoneNumber }),
+        ...(req.body.managerEmail && { managerEmail: req.body.managerEmail })
       } : req.body),
       userId: req.user.id
     };
@@ -46,12 +48,13 @@ const userBusinessDetailsService = {
 
     const dataToUpdate = {
       ...(req.user.role === "partner" ? {
-        businessName: req.body.businessName,
-        gstNumber: req.body.gstNumber,
-        gstAddress: req.body.gstAddress
+        ...(req.body.businessName && { businessName: req.body.businessName }),
+        ...(req.body.gstNumber && { gstNumber: req.body.gstNumber }),
+        ...(req.body.gstAddress && { gstAddress: req.body.gstAddress }),
+        ...(req.body.managerPhoneNumber && { managerPhoneNumber: req.body.managerPhoneNumber }),
+        ...(req.body.managerEmail && { managerEmail: req.body.managerEmail })
       } : req.body)
     };
-
 
     const updatedData = await userBusinessDetailsRepository.updateUserBusinessDetails(dataToUpdate, req.user.id);
 

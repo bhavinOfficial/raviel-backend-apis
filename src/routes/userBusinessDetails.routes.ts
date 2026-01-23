@@ -52,6 +52,12 @@ const router = express.Router();
  *                pancardNumber:
  *                  type: string
  *                  example: ABCDE1234F
+ *                managerPhoneNumber:
+ *                  type: string
+ *                  example: "9996633387"
+ *                managerEmail:
+ *                  type: string
+ *                  example: "manager@gmail.com"
  *              required:
  *                - role
  *                - businessName
@@ -136,6 +142,12 @@ router.post(
  *                pancardNumber:
  *                  type: string
  *                  example: ABCDE1234F
+ *                managerPhoneNumber:
+ *                  type: string
+ *                  example: "9996633387"
+ *                managerEmail:
+ *                  type: string
+ *                  example: "manager@gmail.com"
  *              required:
  *                - role
  *                - businessName

@@ -27,7 +27,7 @@ const partnerController = {
             "string.pattern.base": "Invalid GST number format",
           }).required(),
         trademarkClass: Joi.string().valid("pending", "approved").required(),
-        productCategories: Joi.array().items(Joi.string()).min(1).required()
+        productCategories: Joi.array().items(Joi.string().valid("Fashion", "Footwear", "Home & Kitchen", "Electronics", "Grocery", "Beauty", "Sports", "Toys", "Automobile", "Furniture", "Jewelry", "Books & Stationery", "Industrial & Scientific", "Pet Supplies", "Medical & Healthcare")).min(1).required()
       })
     }),
     handler: async (req: any, res: Response) => {
@@ -69,9 +69,10 @@ const partnerController = {
             "string.pattern.base": "Invalid GST number format",
           }),
         trademarkClass: Joi.string().valid("pending", "approved"),
-        totalSKUs: Joi.number(),
-        pendingSKUs: Joi.number(),
-        liveSKUs: Joi.number(),
+        productCategories: Joi.array().items(Joi.string().valid("Fashion", "Footwear", "Home & Kitchen", "Electronics", "Grocery", "Beauty", "Sports", "Toys", "Automobile", "Furniture", "Jewelry", "Books & Stationery", "Industrial & Scientific", "Pet Supplies", "Medical & Healthcare")),
+        dominantL1AtLaunch: Joi.string(),
+        SKUsAtLaunch: Joi.number(),
+        currentSKUsLive: Joi.number(),
       }),
       params: Joi.object({
         sellerId: Joi.string().required()
@@ -151,13 +152,58 @@ const partnerController = {
 
   fetchAllSellersAddedByPartner: {
     validation: validator({
+      query: Joi.object({
+        sellerId: Joi.string().optional(),
+        sellerName: Joi.string().optional(),
+        paymentByMonthYear: Joi.string()
+          .pattern(/^\d{4}-\d{2}-01$/)
+          .custom((value, helpers) => {
+            const date = new Date(value);
+            if (isNaN(date.getTime())) {
+              return helpers.error("date.invalid");
+            }
+            return value;
+          })
+          .messages({
+            "string.pattern.base": "Date must be in YYYY-MM-01 format",
+            "date.invalid": "Invalid date",
+          })
+          .optional()
+      })
     }),
     handler: async (req: any, res: Response) => {
       const fetchsellersByPartner = await partnerService.fetchAllSellersAddedByPartner(req);
+      if (!fetchsellersByPartner)
+        return ApiResponse.BAD_REQUEST({
+          res,
+          message: message.FAILED,
+        });
       return ApiResponse.OK({
         res,
-        message: "All sellers fetched successfully",
-        payload: fetchsellersByPartner,
+        message: `${!req.query?.sellerId ? "All sellers" : "Seller"} fetched successfully`,
+        payload: (req.query?.sellerId && !fetchsellersByPartner.length) ? {} : fetchsellersByPartner,
+      });
+    },
+  },
+
+  fetchAllOrdersByPartner: {
+    validation: validator({
+      query: Joi.object({
+        sellerId: Joi.string().optional(),
+        orderId: Joi.string().optional(),
+      })
+    }),
+    handler: async (req: any, res: Response) => {
+      const fetchedOrders = await partnerService.fetchAllOrdersByPartner(req);
+      if (!fetchedOrders)
+        return ApiResponse.BAD_REQUEST({
+          res,
+          message: message.FAILED,
+        });
+      return ApiResponse.OK({
+        res,
+        message: "Orders fetched successfully",
+        payload: fetchedOrders,
       });
     },
   },
@@ -181,6 +227,68 @@ const partnerController = {
         payload: {
           errorDatas: sellersAddedByPartner?.errorDatas
         },
+      });
+    },
+  },
+
+  uploadTimelineDataManagementFile: {
+    validation: validator({
+    }),
+    handler: async (req: any, res: Response) => {
+
+      const addedFileData: any = await partnerService.uploadTimelineDataManagementFile(req);
+
+      if (!addedFileData)
+        return ApiResponse.BAD_REQUEST({
+          res,
+          message: message.FAILED,
+        });
+
+      if (typeof addedFileData === "string") {
+        return ApiResponse.BAD_REQUEST({
+          res,
+          message: addedFileData,
+        });
+      }
+
+      return ApiResponse.OK({
+        res,
+        message: `${req.body?.["timeline-data-tenure"]} File uploaded successfully`,
+        payload: {},
+      });
+    },
+  },
+
+  confirmSellerPayment: {
+    validation: validator({
+      params: Joi.object({
+        sellerId: Joi.string().required(),
+      }),
+      body: Joi.object({
+        paymentType: Joi.string().valid("Fixed", "NMV").required(),
+        isPaymentReceivedOrNot: Joi.bool().required()
+      })
+    }),
+    handler: async (req: any, res: Response) => {
+      const updatedSeller: any = await partnerService.confirmSellerPayment(req);
+
+      if (!updatedSeller)
+        return ApiResponse.BAD_REQUEST({
+          res,
+          message: message.FAILED,
+        });
+
+      if (typeof updatedSeller === "string") {
+        return ApiResponse.BAD_REQUEST({
+          res,
+          message: updatedSeller,
+        });
+      }
+
+      return ApiResponse.OK({
+        res,
+        message: "Seller payment confirmation updated successfully",
+        payload: {},
       });
     },
   },

@@ -37,7 +37,7 @@ const SubscriptionPlanIncludedServices = (sequelize: Sequelize, DataTypes: any) 
         field: "subscription_plan_id",
         allowNull: false,
         references: {
-          model: "subscription_plan",
+          model: "subscription_plans",
           key: "id",
         }
       },
@@ -64,7 +64,7 @@ const SubscriptionPlanIncludedServices = (sequelize: Sequelize, DataTypes: any) 
     {
       sequelize,
       modelName: "SubscriptionPlanIncludedServices",
-      tableName: "subscription_plan_included_services ",
+      tableName: "subscription_plan_included_services",
       freezeTableName: true,
       underscored: true,
       timestamps: true,

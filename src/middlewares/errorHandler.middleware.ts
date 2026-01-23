@@ -42,6 +42,13 @@ const errorHandler = async (
     `ERROR at PATH: [${req.path}] METHOD: [${req.method}] MESSAGE: [${err.message}]`
   );
 
+  if (err.provider === "RAZORPAY") {
+  return ApiResponse.BAD_REQUEST({
+    res,
+    message: err.message,
+  });
+}
+
   //* Handling JSON syntax error
   if (err instanceof SyntaxError && err.message.includes("JSON"))
     return ApiResponse.BAD_REQUEST({ res, message: "Invalid JSON syntax" });

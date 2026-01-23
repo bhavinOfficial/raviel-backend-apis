@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import userRoutes from "./user.routes";
 import userBusinessDetailsRoutes from "./userBusinessDetails.routes";
 import partnerRoutes from "./partner.routes";
-import subscriptionPlansRoutes from "./subscriptionPlans.routes";
+import subscriptionPlansRoutes from "./subscriptions.routes";
 import ApiResponse from "../common/utils/apiResponse";
 
 const router = Router();
@@ -10,7 +10,7 @@ const router = Router();
 router.use("/user", userRoutes);
 router.use("/user-business-details", userBusinessDetailsRoutes);
 router.use("/partner", partnerRoutes);
-router.use("/subscription-plans", subscriptionPlansRoutes);
+router.use("/subscriptions", subscriptionPlansRoutes);
 
 //? GET
 /**

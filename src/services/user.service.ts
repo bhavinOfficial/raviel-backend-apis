@@ -55,6 +55,7 @@ const userService = {
       ...(req.body.lastName && { lastName: req.body.lastName }),
       ...(req.body.phoneNumber && { phoneNumber: req.body.phoneNumber }),
     }
+
     const userBusinessInfo = {
       ...(req.body.businessName && { businessName: req.body.businessName }),
       ...(req.body.gstNumber && { gstNumber: req.body.gstNumber }),
@@ -64,8 +65,10 @@ const userService = {
       ...(req.body.pickupAddress && { pickupAddress: req.body.pickupAddress }),
       ...(req.body.businessType && { businessType: req.body.businessType }),
       ...(req.body.pancardNumber && { pancardNumber: req.body.pancardNumber }),
+      ...(req.body.managerPhoneNumber && { managerPhoneNumber: req.body.managerPhoneNumber }),
+      ...(req.body.managerEmail && { managerEmail: req.body.managerEmail }),
     }
-
+    
     const user = await userRepository.findUser(req);
 
     if (!user) return message.USER_NOT_FOUND;

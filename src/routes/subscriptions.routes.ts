@@ -2,13 +2,13 @@ import express from "express";
 import userBusinessDetailsController from "../controllers/userBusinessDetails.controller";
 import { enums } from "../common/constants";
 import auth from "../middlewares/auth.middleware";
-import subscriptionPlansController from "../controllers/subscriptionPlans.controller";
+import subscriptionController from "../controllers/subscription.controller";
 const router = express.Router();
 
 //? GET
 /**
  * @openapi
- * /subscription-plans:
+ * /subscriptions/fetch-plans:
  *    get:
  *      tags:
  *      - Subscription-Plans
@@ -97,13 +97,43 @@ const router = express.Router();
  */
 //* Fetch subscriptionplans API
 router.get(
-  "/",
+  "/fetch-plans",
   auth({
     isTokenRequired: false,
     usersAllowed: [],
   }),
-  subscriptionPlansController.fetchSubscriptionPlans.validation,
-  subscriptionPlansController.fetchSubscriptionPlans.handler
+  subscriptionController.fetchSubscriptionPlans.validation,
+  subscriptionController.fetchSubscriptionPlans.handler
 );
 
+
+router.post(
+  "/create",
+  auth({
+    isTokenRequired: true,
+    usersAllowed: [enums.ROLE.PARTNER, enums.ROLE.SELLER],
+  }),
+  subscriptionController.createSubscription.validation,
+  subscriptionController.createSubscription.handler
+);
+
+router.post(
+  "/payment/verify",
+  auth({
+    isTokenRequired: true,
+    usersAllowed: [enums.ROLE.PARTNER, enums.ROLE.SELLER],
+  }),
+  subscriptionController.verifyPayment.validation,
+  subscriptionController.verifyPayment.handler
+);
+
+router.post(
+  "/razorpay/webhooks",
+  auth({
+    isTokenRequired: false,
+    usersAllowed: [],
+  }),
+  subscriptionController.razorpayWebhook.validation,
+  subscriptionController.razorpayWebhook.handler
+);
 export default router;

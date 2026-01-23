@@ -108,7 +108,12 @@ const userController = {
         pancardNumber: Joi.string().pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)
           .messages({
             "string.pattern.base": "Invalid PAN card number format",
-          }).optional()
+          }).optional(),
+        managerPhoneNumber: Joi.string().pattern(/^\d{10}$/)
+          .messages({
+            "string.pattern.base": "Invalid manager phone number format",
+          }).allow("", null).optional(),
+        managerEmail: Joi.string().email().allow("", null).optional(),
       }),
     }),
     handler: async (req: any, res: Response) => {

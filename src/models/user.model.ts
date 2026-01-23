@@ -11,6 +11,11 @@ const UserModel = (sequelize: Sequelize, DataTypes: any) => {
     public role!: string;
     public phoneNumber!: string;
     public lastLoginDate!: Date | null;
+    public isOnboardingCompleted!: boolean;
+    public totalFixedPayment!: number;
+    public totalNMVPayment!: number;
+    public finalPayout!: number;
+    public razorpayCustomerId!: string;
     public createdAt!: Date;
     public updatedAt!: Date | null;
     public isActive!: boolean;
@@ -26,10 +31,10 @@ const UserModel = (sequelize: Sequelize, DataTypes: any) => {
           foreignKey: "userId",
           as: "userBusinessDetails",
         });
-        // User.belongsTo(models.Role, {
-        //   foreignKey: "role_id",
-        //   as: "role",
-        // });
+        User.hasMany(models.UserSubscriptions, {
+          foreignKey: "userId",
+          as: "userSubscriptions",
+        });
     }
   }
 
@@ -77,6 +82,29 @@ const UserModel = (sequelize: Sequelize, DataTypes: any) => {
         type: DataTypes.BOOLEAN,
         field: "is_onboarding_completed",
         defaultValue: false,
+      },
+      totalFixedPayment: {
+        type: DataTypes.DECIMAL(10, 2),
+        field: "total_fixed_payment",
+        defaultValue: 0,
+        allowNull: false
+      },
+      totalNMVPayment: {
+        type: DataTypes.DECIMAL(10, 2),
+        field: "total_nmv_payment",
+        defaultValue: 0,
+        allowNull: false
+      },
+      finalPayout: {
+        type: DataTypes.DECIMAL(10, 2),
+        field: "final_payout",
+        defaultValue: 0,
+        allowNull: false
+      },
+      razorpayCustomerId: {
+        type: DataTypes.STRING,
+        field: "razorpay_customer_id",
+        allowNull: true
       },
       isActive: {
         type: DataTypes.BOOLEAN,

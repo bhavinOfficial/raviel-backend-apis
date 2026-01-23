@@ -13,6 +13,8 @@ const UserBusinessDetails = (sequelize: Sequelize, DataTypes: any) => {
     public pickupAddress!: string;
     public businessType!: string;
     public pancardNumber!: string;
+    public managerPhoneNumber!: string;
+    public managerEmail!: string;
     public createdAt!: Date;
     public updatedAt!: Date | null;
 
@@ -83,6 +85,16 @@ const UserBusinessDetails = (sequelize: Sequelize, DataTypes: any) => {
         type: DataTypes.STRING,
         field: "pancard_number",
         unique: true,
+      },
+      managerPhoneNumber: {
+        type: DataTypes.STRING,
+        field: "manager_phone_number",
+        allowNull: true,
+      },
+      managerEmail: {
+        type: DataTypes.STRING,
+        field: "manager_email",
+        allowNull: true,
       },
       createdAt: {
         type: DataTypes.DATE,

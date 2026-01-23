@@ -8,7 +8,6 @@ const userRepository = {
   },
 
   findUser: async (req: any) => {
-
     return await db.User.findOne({
       where: {
         [Op.or]: [
@@ -22,6 +21,18 @@ const userRepository = {
           model: db.UserBusinessDetails,
           as: "userBusinessDetails",
           required: false, // ✅ IMPORTANT
+        },
+        {
+          model: db.UserSubscriptions,
+          as: "userSubscriptions",
+          required: false, // ✅ IMPORTANT,
+          include: [
+            {
+              model: db.SubscriptionPlans,
+              as: "subscriptionPlanDetails",
+              required: false, // ✅ IMPORTANT,
+            }
+          ]
         }
       ],
       raw: true,

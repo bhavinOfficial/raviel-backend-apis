@@ -28,7 +28,7 @@ const fileFilter: multer.Options["fileFilter"] = (req, file, cb) => {
   if (allowedMime.includes(file.mimetype)  ) {
     cb(null, true);
   } else {
-    cb(new Error("  ") as any, false);
+    cb(new Error("Only .xlsx and .csv files are allowed") as any, false);
   }
 };
 

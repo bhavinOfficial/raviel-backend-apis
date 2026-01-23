@@ -7,12 +7,28 @@ const partnerRepository = {
     return await db.PartnerAddedSellers.create(data);
   },
 
+  sellerOrdersAddedByPartnerUsingFile: async (data: any) => {
+    return await db.PartnerSellersOrders.bulkCreate(data, {
+      updateOnDuplicate: [
+        // "sellerId",
+        "orderCreatedDate",
+        // "orderId",
+        // "shipmentId",
+        "shipmentStatus",
+        "orderValue",
+        "deliveryPartner",
+        "modeOfPayment",
+        "orderShipped",
+      ],
+    });
+  },
+
   findSellerAddedByPartner: async (sellerId: string, partnerId: string) => {
     return await db.PartnerAddedSellers.findOne({
       where: {
         [Op.and]: [
           {
-            sellerId: {
+            id: {
               [Op.eq]: sellerId
             },
           },
@@ -30,7 +46,7 @@ const partnerRepository = {
   updateSellerAddedByPartner: async (data: any, sellerId: string) => {
     const [updatedCount, [updatedSeller]] = await db.PartnerAddedSellers.update(data, {
       where: {
-        sellerId,
+        id: sellerId,
       },
       raw: true,
       returning: true,
@@ -46,7 +62,7 @@ const partnerRepository = {
   deleteSellerAddedByPartner: async (sellerId: string) => {
     const deletedCount = await db.PartnerAddedSellers.destroy({
       where: {
-        sellerId,
+        id: sellerId,
       },
     });
 
@@ -57,17 +73,65 @@ const partnerRepository = {
     }
   },
 
-  fetchAllSellersAddedByPartner: async (partnerId: string) => {
+  fetchAllSellersAddedByPartner: async (req: any) => {
     const fetchedSellers = await db.PartnerAddedSellers.findAll({
       where: {
-        partnerId,
+        partnerId: req.user?.id,
+        ...(req.query?.sellerId && {
+          id: { [Op.iLike]: `%${req.query?.sellerId}%` }
+        }),
+        ...(req.query?.sellerName && {
+          sellerName: { [Op.iLike]: `%${req.query?.sellerName}%` }
+        }),
+        ...(req.query.paymentByMonthYear && {
+          [Op.or]: [
+            {
+              fixedPaymentMonthYear: {
+                [Op.eq]: req.query.paymentByMonthYear
+              }
+            },
+            {
+              NMVPaymentMonthYear: {
+                [Op.eq]: req.query.paymentByMonthYear
+              }
+            }
+          ]
+        })
       },
       raw: true
     });
     return fetchedSellers;
   },
 
-  addSellersByPartnerUsingFile: async (dataToAdd: any) => {
+  fetchAllOrdersByPartner: async (req: any) => {
+    const fetchedOrders = await db.PartnerSellersOrders.findAll({
+      where: {
+        partnerId: req.user?.id,
+        ...(req.query?.sellerId && {
+          sellerId: req.query?.sellerId
+        }
+        ),
+        ...(req.query?.orderId && {
+          id: req.query?.orderId
+        }
+        ),
+      },
+      raw: true
+    });
+    return fetchedOrders;
+  },
+
+  fetchAllSellersBySellerIds: async (sellerIds: string[]) => {
+    const fetchedSellers = await db.PartnerAddedSellers.findAll({
+      where: {
+        sellerId: sellerIds,
+      },
+      raw: true
+    });
+    return fetchedSellers;
+  },
+
+  createOrUpdateBulkSellers: async (dataToAdd: any) => {
     const addedSellers = await db.PartnerAddedSellers.bulkCreate(dataToAdd, {
       updateOnDuplicate: [
         "sellerName",
@@ -81,6 +145,15 @@ const partnerRepository = {
         "gstNumber",
         "trademarkClass",
         "productCategories",
+        "sellerEmailId",
+        "sellerStatus",
+        "dominantL1AtLaunch",
+        "SKUsAtLaunch",
+        "currentSKUsLive",
+        "fixedPaymentAmount",
+        "fixedPaymentMonthYear",
+        "NMVPaymentAmount",
+        "NMVPaymentMonthYear"
       ],
     });
     return addedSellers;

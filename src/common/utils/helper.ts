@@ -71,13 +71,31 @@ const helper = {
   // }
 
   encrypt: (plainText: string) => {
-  return CryptoJS.AES.encrypt(plainText, SECRET).toString();
-},
+    return CryptoJS.AES.encrypt(plainText, SECRET).toString();
+  },
 
-  decrypt: (cipherText: string) =>  {
-  const bytes = CryptoJS.AES.decrypt(cipherText, SECRET);
-  return bytes.toString(CryptoJS.enc.Utf8);
-}
+  decrypt: (cipherText: string) => {
+    const bytes = CryptoJS.AES.decrypt(cipherText, SECRET);
+    return bytes.toString(CryptoJS.enc.Utf8);
+  },
+
+  trimKeysAndValuesOfObject: (obj: Record<string, any>) => {
+    const result: Record<string, any> = {};
+
+    Object.entries(obj).forEach(([key, value]) => {
+      const trimmedKey = key.trim();
+
+      let trimmedValue = value;
+
+      if (typeof value === "string") {
+        trimmedValue = value.trim();
+      }
+
+      result[trimmedKey] = trimmedValue;
+    });
+
+    return result;
+  }
 
 
   //   //* Send email using sendGrid

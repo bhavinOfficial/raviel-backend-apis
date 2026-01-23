@@ -9,9 +9,18 @@ import swaggerJSDoc from "swagger-jsdoc";
 import path from "path";
 import fs from "fs";
 import cors from "cors";
+import subscriptionController from "./controllers/subscription.controller";
 
 const app = express();
 const port = config.port;
+
+app.use(
+  "/api/v1/subscriptions/razorpay/webhooks",
+  express.raw({ type: "application/json" }),
+);
+
+
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -23,7 +32,7 @@ app.use(
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://raviel.netlify.app", "https://raviel-partner-panel.netlify.app"],
+    origin: ["http://localhost:1234", "http://localhost:5173", "http://localhost:5174", "https://raviel.netlify.app", "https://raviel-partner-panel.netlify.app"],
   })
 );
 

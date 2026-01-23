@@ -305,6 +305,12 @@ router.post(
  *                pancardNumber:
  *                  type: string
  *                  example: ABCDE1234F
+ *                managerPhoneNumber:
+ *                  type: string
+ *                  example: "9995556663"
+ *                managerEmail:
+ *                  type: string
+ *                  example: manager@gmail.com
  *        required: true
  *      responses:
  *        200:
@@ -439,12 +445,93 @@ router.put(
  *                            pancardNumber:
  *                              type: string
  *                              example: ABCDE1234F                         
+ *                            managerPhoneNumber:
+ *                              type: string
+ *                              example: "9995556663"                        
+ *                            managerEmail:
+ *                              type: string
+ *                              example: manager@gmail.com                         
  *                            createdAt:
  *                              type: string
  *                              example: 2026-01-15T17:10:47.201Z                         
  *                            updatedAt:
  *                              type: string
  *                              example: 2026-01-15T17:10:47.201Z                        
+ *                      userSubscriptions:
+ *                        type: object
+ *                        properties:
+ *                            id:
+ *                              type: string
+ *                              example: 96ad270b-87f5-49b3-abed-a190ec41529d                        
+ *                            userId:
+ *                              type: string
+ *                              example: a9201deb-ca29-476f-99f8-2e740f4639ca                        
+ *                            subscriptionPlanId:
+ *                              type: string
+ *                              example: a426f61e-ea09-4bea-9b87-163f766d6303                       
+ *                            razorpaySubscriptionId:
+ *                              type: string
+ *                              example: sub_S7SrQkjwbyhFBW                         
+ *                            razorpayPlanId:
+ *                              type: string
+ *                              example: plan_S7FPZXIdNebDx0                         
+ *                            status:
+ *                              type: string
+ *                              example: active                         
+ *                            currentPeriodStart:
+ *                              type: string
+ *                              example: 2026-01-23T21:14:26.000Z                        
+ *                            currentPeriodEnd:
+ *                              type: string
+ *                              example: 2026-02-23T18:30:00.000Z                         
+ *                            createdAt:
+ *                              type: string
+ *                              example: 2026-01-15T17:10:47.201Z                         
+ *                            updatedAt:
+ *                              type: string
+ *                              example: 2026-01-15T17:10:47.201Z                        
+ *                            subscriptionPlanDetails:
+ *                              type: object
+ *                              properties:
+ *                                  id:
+ *                                    type: string
+ *                                    example: 96ad270b-87f5-49b3-abed-a190e141519d                        
+ *                                  planName:
+ *                                    type: string
+ *                                    example: Seller Special                        
+ *                                  planDescription:
+ *                                    type: string
+ *                                    example: Basic tools to handle daily billing, inventory visibility, and bank settlements.                       
+ *                                  planType:
+ *                                    type: string
+ *                                    example: monthly                         
+ *                                  planTypeMonths:
+ *                                    type: string
+ *                                    example: 1                         
+ *                                  isPopular:
+ *                                    type: string
+ *                                    example: false                         
+ *                                  discountInPercentage:
+ *                                    type: string
+ *                                    example: 0                   
+ *                                  price:
+ *                                    type: number
+ *                                    example: 1999                          
+ *                                  displayOrder:
+ *                                    type: number
+ *                                    example: 1                          
+ *                                  userType:
+ *                                    type: string
+ *                                    example: seller                        
+ *                                  razorpayPlanId:
+ *                                    type: string
+ *                                    example: plan_S7FPZXIdNebDx0                        
+ *                                  createdAt:
+ *                                    type: string
+ *                                    example: 2026-01-15T17:10:47.201Z                         
+ *                                  updatedAt:
+ *                                    type: string
+ *                                    example: 2026-01-15T17:10:47.201Z                        
  */
 //* Fetch logged in User API
 router.get(

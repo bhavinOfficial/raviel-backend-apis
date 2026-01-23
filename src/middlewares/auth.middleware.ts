@@ -77,27 +77,28 @@ const auth = ({ isTokenRequired = true, usersAllowed = [] }: AuthOptions) => {
       where: { id: decoded.id },
       raw: true,
     });
-
+    
     //* check if user is present in the database or not
     if (!user)
       return ApiResponse.UNAUTHORIZED({
-        res,
-        message: "Access denied. Invalid token.",
-      });
+    res,
+    message: "Access denied. Invalid token.",
+  });
+  
+  //* check if user is active or not
+  if (!user.isActive)
+    return ApiResponse.UNAUTHORIZED({
+  res,
+  message: "Access denied. User is not active.",
+});
 
-    //* check if user is active or not
-    if (!user.isActive)
-      return ApiResponse.UNAUTHORIZED({
-        res,
-        message: "Access denied. User is not active.",
-      });
-
-    //* Make user object and assign user details to it
-    req.user = {
-      id: user.id,
-      role: user.role,
-      email: user.email,
-    };
+//* Make user object and assign user details to it
+    req.user = user;
+    // {
+    //   id: user.id,
+    //   role: user.role,
+    //   email: user.email,
+    // };
 
     // next();
     //* check if user is allowed to access the route or not

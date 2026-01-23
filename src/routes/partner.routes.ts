@@ -117,7 +117,7 @@ router.post(
  *          in: path
  *          schema:
  *            type: string
- *          example: 
+ *          example: c7f862ef-6e24-428c-ae20-16d8d47207a
  *          required: true
  *      requestBody:
  *        description: 'Request body payload'
@@ -153,6 +153,15 @@ router.post(
  *                gstNumber:
  *                  type: string
  *                  example: 29AAACR5055K1Z6
+ *                dominantL1AtLaunch:
+ *                  type: string
+ *                  example: Fashion
+ *                SKUsAtLaunch:
+ *                  type: number
+ *                  example: 10
+ *                currentSKUsLive:
+ *                  type: number
+ *                  example: 70
  *                trademarkClass:
  *                  type: string
  *                  example: pending
@@ -214,7 +223,7 @@ router.put(
  *          in: path
  *          schema:
  *            type: string
- *          example: 
+ *          example: c7f862ef-6e24-428c-ae20-16d8d47207a
  *          required: true
  *      requestBody: []
  *      responses:
@@ -269,7 +278,7 @@ router.delete(
  *          in: path
  *          schema:
  *            type: string
- *          example: 
+ *          example: c7f862ef-6e24-428c-ae20-16d8d47207a
  *          required: true
  *      requestBody: []
  *      responses:
@@ -365,6 +374,8 @@ router.get(
   partnerController.fetchSellerAddedByPartner.handler
 );
 
+
+
 //? get
 /**
  * @openapi
@@ -378,7 +389,22 @@ router.get(
  *      deprecated: false
  *      security: 
  *        - bearerAuth: []
- *      parameters: []
+ *      parameters:
+ *        - name: sellerId
+ *          in: query
+ *          schema:
+ *            type: string
+ *          example: c7f862ef-6e24-428c-ae20-16d8d47207a
+ *        - name: sellerName
+ *          in: query
+ *          schema:
+ *            type: string
+ *          example: JD Evergreen
+ *        - name: paymentByMonthYear
+ *          in: query
+ *          schema:
+ *            type: string
+ *          example: 2025-05-01
  *      requestBody: []
  *      responses:
  *        200:
@@ -443,20 +469,41 @@ router.get(
  *                        trademarkClass:
  *                          type: string
  *                          example: pending
- *                        totalSKUs:
+ *                        dominantL1AtLaunch:
+ *                          type: string
+ *                          example: Fashion
+ *                        SKUsAtLaunch:
  *                          type: number
- *                          example: 0
- *                        pendingSKUs:
+ *                          example: 20
+ *                        currentSKUsLive:
  *                          type: number
- *                          example: 0
- *                        liveSKUs:
- *                          type: number
- *                          example: 0
+ *                          example: 80
  *                        productCategories:
  *                          type: array
  *                          items: 
  *                            type: string
  *                          example: ["electronics", "clothing"]
+ *                        sellerStatus:
+ *                          type: string
+ *                          example: active
+ *                        fixedPaymentAmount:
+ *                          type: number
+ *                          example: 2000
+ *                        fixedPaymentMonthYear:
+ *                          type: string
+ *                          example: "2025-05-01"
+ *                        fixedPaymentReceivedOrNot:
+ *                          type: boolean
+ *                          example: true
+ *                        NMVPaymentAmount:
+ *                          type: number
+ *                          example: 30000
+ *                        NMVPaymentMonthYear:
+ *                          type: string
+ *                          example: "2025-07-01"
+ *                        NMVPaymentReceivedOrNot:
+ *                          type: boolean
+ *                          example: true
  *                        createdAt:
  *                          type: string
  *                          example: "2026-01-13T19:42:57.448Z"
@@ -474,6 +521,106 @@ router.get(
   partnerController.fetchAllSellersAddedByPartner.validation,
   partnerController.fetchAllSellersAddedByPartner.handler
 );
+
+
+//? get
+/**
+ * @openapi
+ * /partner/fetch-all-orders:
+ *    get:
+ *      tags:
+ *      - Partner
+ *      summary: fetch-all-sellers-orders-added-by-partner
+ *      description: This is the API for fetching all the sellers;s orders added by partner.
+ *      operationId: fetch-all-sellers-orders-added-by-partner
+ *      deprecated: false
+ *      security: 
+ *        - bearerAuth: []
+ *      parameters:
+ *        - name: sellerId
+ *          in: query
+ *          schema:
+ *            type: string
+ *          example: c7f862ef-6e24-428c-ae20-16d8d47207a
+ *        - name: orderId
+ *          in: query
+ *          schema:
+ *            type: string
+ *          example: 1feea7a2-83ad-4ff1-9146-f971fbcf5b8e
+ *      requestBody: []
+ *      responses:
+ *        200:
+ *          description: OK
+ *          headers: {}
+ *          content:
+ *            application/json; charset=utf-8:
+ *              schema:
+ *              type: 
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    example: true
+ *                  status:
+ *                    type: integer
+ *                    format: int32
+ *                    example: 200
+ *                  message:
+ *                    type: string
+ *                    example: All orders fetched successfully
+ *                  payload:
+ *                    type: array
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        id:
+ *                          type: string
+ *                          example: "fde54329-dead-4f73-a286-5f9882ac7e85"
+ *                        sellerId:
+ *                          type: string
+ *                          example: ER77R9 
+ *                        orderCreatedDate:
+ *                          type: string
+ *                          example: "2025-06-07"
+ *                        orderId:
+ *                          type: string
+ *                          example: 17613677800912037A
+ *                        shipmentId:
+ *                          type: string
+ *                          example: 17616678258431218295J
+ *                        shipmentStatus:
+ *                          type: string
+ *                          example: DELIVERED
+ *                        orderValue:
+ *                          type: number
+ *                          example: 699
+ *                        deliveryPartner:
+ *                          type: string
+ *                          example: delhivery_jio
+ *                        modeOfPayment:
+ *                          type: string
+ *                          example: COD
+ *                        orderShipped:
+ *                          type: boolean
+ *                          example: true
+ *                        createdAt:
+ *                          type: string
+ *                          example: "2026-01-13T19:42:57.448Z"
+ *                        updatedAt:
+ *                          type: string
+ *                          example: "2026-01-13T19:42:57.458Z"
+ */
+//* All orders fetch by partner API
+router.get(
+  "/fetch-all-orers",
+  auth({
+    isTokenRequired: true,
+    usersAllowed: [enums.ROLE.PARTNER],
+  }),
+  partnerController.fetchAllOrdersByPartner.validation,
+  partnerController.fetchAllOrdersByPartner.handler
+);
+
 
 //? post
 /**
@@ -534,6 +681,143 @@ router.post(
   uploadExcel.single("add-sellers-excel-file"),
   partnerController.addSellersByPartnerUsingFile.validation,
   partnerController.addSellersByPartnerUsingFile.handler
+);
+
+
+//? post
+/**
+ * @openapi
+ * /partner/timeline-data-management:
+ *    post:
+ *      tags:
+ *      - Partner
+ *      summary: add-timeline-file-data-of-sellers-using-file-by-partner
+ *      description: This is the API for uploading file for daily, weekly and monthly file using excel by partner.
+ *      operationId: add-timeline-file-data-of-sellers-using-file-by-partner
+ *      deprecated: false
+ *      security: 
+ *        - bearerAuth: []
+ *      parameters: []
+ *      requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - timeline-data-management-file
+ *             properties:
+ *               timeline-data-management-file:
+ *                 type: string
+ *                 format: binary
+ *                 description: "*Only .xlsx and .csv files are allowed."
+ *               timeline-data-tenure:
+ *                 type: string
+ *                 enum: [daily, weekly, monthly]
+ *                 description: Time tenure value
+ *      responses:
+ *        200:
+ *          description: OK
+ *          headers: {}
+ *          content:
+ *            application/json; charset=utf-8:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    example: true
+ *                  status:
+ *                    type: integer
+ *                    format: int32
+ *                    example: 200
+ *                  message:
+ *                    type: string
+ *                    example: (daily|weekly|monthly) File uploaded successfully
+ *                  payload:
+ *                    type: object
+ *                    example: {}
+ */
+//* Timeline wise data store using file by partner API
+router.post(  
+  "/timeline-data-management",
+  auth({
+    isTokenRequired: true,
+    usersAllowed: [enums.ROLE.PARTNER],
+  }),
+  uploadExcel.single("timeline-data-management-file"),
+  partnerController.uploadTimelineDataManagementFile.validation,
+  partnerController.uploadTimelineDataManagementFile.handler
+);
+
+
+//? put
+/**
+ * @openapi
+ * /partner/confirm-seller-payment/:sellerId:
+ *    put:
+ *      tags:
+ *      - Partner
+ *      summary: seller-payment-confirm-by-partner
+ *      description: This is the API for confirming payment of seller by partner.
+ *      operationId: seller-payment-confirm-by-partner
+ *      deprecated: false
+ *      security: 
+ *        - bearerAuth: []
+ *      parameters:
+ *        - name: sellerId
+ *          in: query
+ *          schema:
+ *            type: string
+ *          example: D77WE7
+ *      requestBody:
+ *       description: 'Request body payload'
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - paymentType
+ *             properties:
+ *               paymentType:
+ *                 type: string
+ *                 enum: [Fixed, NMV]
+ *                 example: Fixed
+ *               isPaymentReceivedOrNot:
+ *                 type: string
+ *                 enum: [true, false]
+ *                 example: true
+ *      responses:
+ *        200:
+ *          description: OK
+ *          headers: {}
+ *          content:
+ *            application/json; charset=utf-8:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  success:
+ *                    type: boolean
+ *                    example: true
+ *                  status:
+ *                    type: integer
+ *                    format: int32
+ *                    example: 200
+ *                  message:
+ *                    type: string
+ *                    example: Seller payment confirmation updated successfully
+ *                  payload:
+ *                    type: object
+ *                    example: {}
+ */
+//* confirm seller payment by partner API
+router.put(  
+  "/confirm-seller-payment/:sellerId",
+  auth({
+    isTokenRequired: true,
+    usersAllowed: [enums.ROLE.PARTNER],
+  }),
+  partnerController.confirmSellerPayment.validation,
+  partnerController.confirmSellerPayment.handler
 );
 
 export default router;

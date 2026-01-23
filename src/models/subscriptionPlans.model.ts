@@ -11,6 +11,7 @@ const SubscriptionPlans = (sequelize: Sequelize, DataTypes: any) => {
     public isPopular!: boolean;
     public discountInPercentage!: number;
     public price!: number;
+    public razorpayPlanId!: string;
     public displayOrder!: number;
     public createdAt!: Date;
     public updatedAt!: Date | null;
@@ -87,6 +88,11 @@ const SubscriptionPlans = (sequelize: Sequelize, DataTypes: any) => {
         type: DataTypes.ENUM("partner", "seller"),
         field: "user_type",
         allowNull: false
+      },
+      razorpayPlanId: {
+        type: DataTypes.STRING,
+        field: "razorpay_plan_id",
+        allowNull: true
       },
       createdAt: {
         type: DataTypes.DATE,
