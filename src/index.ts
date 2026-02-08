@@ -9,7 +9,8 @@ import swaggerJSDoc from "swagger-jsdoc";
 import path from "path";
 import fs from "fs";
 import cors from "cors";
-import subscriptionController from "./controllers/subscription.controller";
+import userSubscriptionRepository from "./repositories/userSubscriptions.repository";
+import { startCronJobs } from "./cron";
 
 const app = express();
 const port = config.port;
@@ -19,21 +20,20 @@ app.use(
   express.raw({ type: "application/json" }),
 );
 
-
-
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(
-  "/public",
-  express.static(path.join(process.cwd(), "public"))
-);
+app.use("/public", express.static(path.join(process.cwd(), "public")));
 
 app.use(
   cors({
-    origin: ["http://localhost:1234", "http://localhost:5173", "http://localhost:5174", "https://raviel.netlify.app", "https://raviel-partner-panel.netlify.app"],
-  })
+    origin: [
+      "http://localhost:5173",
+      "https://raviel.in",
+      "https://www.raviel.in",
+      "https://partner.raviel.in",
+    ],
+  }),
 );
 
 //* API routes path
@@ -83,7 +83,7 @@ app.use(
   serve,
   setup(swaggerDocs, {
     customSiteTitle: "Raviel API Documentation",
-  })
+  }),
 );
 
 app.get("/docs.json", (req, res) => {
@@ -109,9 +109,15 @@ db.sequelize
   .authenticate()
   .then(() => {
     console.log("Database connection established successfully.");
-    app.listen(port, () => {
+    const server = app.listen(port, () => {
       console.log(`Server running on port ${port}`);
     });
+
+    // 🔥 IMPORTANT: increase server timeout (fixes Axios timeout issue)
+    server.setTimeout(120000); // 2 minutes
+
+    // 🔥 START CRON JOBS
+    startCronJobs();
   })
   .catch((error: any) => {
     console.error("Unable to connect to the database:", error);

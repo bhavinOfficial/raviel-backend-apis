@@ -23,7 +23,12 @@ const envVarsSchema = Joi.object()
     DATABASE_URL: Joi.string().required().description("Database url"),
     CRYPTO_SECRET_KEY: Joi.string().required().description("Crypto secret key"),
     RAZORPAY_KEY_ID: Joi.string().required().description("Razorpay Key ID"),
-    RAZORPAY_KEY_SECRET: Joi.string().required().description("Razorpay Key Secret"),
+    RAZORPAY_KEY_SECRET: Joi.string()
+      .required()
+      .description("Razorpay Key Secret"),
+    RAZORPAY_WEBHOOK_SECRET: Joi.string()
+      .required()
+      .description("Razorpay webhook Secret"),
     // JWT_ACCESS_EXPIRATION_MINUTES: Joi.number()
     //   .default(30)
     //   .description("minutes after which access tokens expire"),
@@ -63,6 +68,7 @@ const config = {
   crypto_secret_key: envVars.CRYPTO_SECRET_KEY,
   razorpay_key_id: envVars.RAZORPAY_KEY_ID,
   razorpay_key_secret: envVars.RAZORPAY_KEY_SECRET,
+  razorpay_webhook_secret: envVars.RAZORPAY_WEBHOOK_SECRET,
 };
 
 export default config;

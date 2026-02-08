@@ -20,13 +20,13 @@ const router = express.Router();
  *      parameters:
  *        - name: userType
  *          in: query
- *          schema: 
+ *          schema:
  *            type: string
  *            example: "partner"
  *            enum: [partner, seller, all]
  *        - name: planType
  *          in: query
- *          schema: 
+ *          schema:
  *            type: string
  *            example: "monthly"
  *            enum: [monthly, quarterly, half-yearly, yearly]
@@ -55,7 +55,7 @@ const router = express.Router();
  *                    properties:
  *                      partner:
  *                        type: array
- *                        items: 
+ *                        items:
  *                          type: object
  *                          properties:
  *                            id:
@@ -103,9 +103,8 @@ router.get(
     usersAllowed: [],
   }),
   subscriptionController.fetchSubscriptionPlans.validation,
-  subscriptionController.fetchSubscriptionPlans.handler
+  subscriptionController.fetchSubscriptionPlans.handler,
 );
-
 
 router.post(
   "/create",
@@ -114,17 +113,27 @@ router.post(
     usersAllowed: [enums.ROLE.PARTNER, enums.ROLE.SELLER],
   }),
   subscriptionController.createSubscription.validation,
-  subscriptionController.createSubscription.handler
+  subscriptionController.createSubscription.handler,
 );
 
 router.post(
-  "/payment/verify",
+  "/verify",
   auth({
     isTokenRequired: true,
     usersAllowed: [enums.ROLE.PARTNER, enums.ROLE.SELLER],
   }),
-  subscriptionController.verifyPayment.validation,
-  subscriptionController.verifyPayment.handler
+  subscriptionController.verifySubscription.validation,
+  subscriptionController.verifySubscription.handler,
+);
+
+router.delete(
+  "/checkout-ui-close-or-payment-failed",
+  auth({
+    isTokenRequired: true,
+    usersAllowed: [enums.ROLE.PARTNER, enums.ROLE.SELLER],
+  }),
+  subscriptionController.checkoutUICloseOrPaymentFailed.validation,
+  subscriptionController.checkoutUICloseOrPaymentFailed.handler,
 );
 
 router.post(
@@ -134,6 +143,16 @@ router.post(
     usersAllowed: [],
   }),
   subscriptionController.razorpayWebhook.validation,
-  subscriptionController.razorpayWebhook.handler
+  subscriptionController.razorpayWebhook.handler,
+);
+
+router.post(
+  "/cancel",
+  auth({
+    isTokenRequired: true,
+    usersAllowed: [enums.ROLE.PARTNER, enums.ROLE.SELLER],
+  }),
+  subscriptionController.cancelSubscription.validation,
+  subscriptionController.cancelSubscription.handler,
 );
 export default router;

@@ -17,8 +17,8 @@ const PartnerAddedSellers = (sequelize: Sequelize, DataTypes: any) => {
     public brandApproval!: string;
     public gstNumber!: string;
     public trademarkClass!: string;
-    public dominantL1AtLaunch!: string; 
-    public SKUsAtLaunch!: number; 
+    public dominantL1AtLaunch!: string;
+    public SKUsAtLaunch!: number;
     public currentSKUsLive!: number;
     public productCategories!: string[];
     public sellerStatus!: string;
@@ -31,13 +31,13 @@ const PartnerAddedSellers = (sequelize: Sequelize, DataTypes: any) => {
     public createdAt!: Date;
     public updatedAt!: Date | null;
 
-
     static associate(models: any) {
       //* define association here
-      //   User.belongsTo(models.Role, {
-      //     foreignKey: "role_id",
-      //     as: "role",
-      //   });
+      PartnerAddedSellers.hasMany(models.PartnerSellersOrders, {
+        foreignKey: "sellerrId",
+        sourceKey: "id",
+        as: "sellerOrders",
+      });
     }
   }
 
@@ -55,7 +55,7 @@ const PartnerAddedSellers = (sequelize: Sequelize, DataTypes: any) => {
         references: {
           model: "users",
           key: "id",
-        }
+        },
       },
       sellerId: {
         type: DataTypes.STRING,
@@ -101,71 +101,71 @@ const PartnerAddedSellers = (sequelize: Sequelize, DataTypes: any) => {
       gstNumber: {
         type: DataTypes.STRING,
         field: "gst_number",
-        allowNull: true
+        allowNull: true,
       },
       trademarkClass: {
         type: DataTypes.ENUM("pending", "approved"),
         field: "trademark_class",
-        allowNull: true
+        allowNull: true,
       },
       dominantL1AtLaunch: {
         type: DataTypes.STRING,
         field: "dominant_L1_at_launch",
-        allowNull: true
+        allowNull: true,
       },
       SKUsAtLaunch: {
         type: DataTypes.INTEGER,
         field: "SKUs_at_launch",
-        defaultValue: 0
+        defaultValue: 0,
       },
       currentSKUsLive: {
         type: DataTypes.INTEGER,
         field: "current_SKUs_live",
-        defaultValue: 0
+        defaultValue: 0,
       },
       productCategories: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         defaultValue: [],
-        allowNull: true,    
+        allowNull: true,
         field: "product_categories",
       },
       sellerStatus: {
         type: DataTypes.ENUM("active", "inactive"),
-        allowNull: true,    
+        allowNull: true,
         field: "seller_status",
       },
       fixedPaymentAmount: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
-        allowNull: true,    
+        allowNull: true,
         field: "fixed_payment_amount",
       },
       fixedPaymentMonthYear: {
         type: DataTypes.DATEONLY,
-        allowNull: true,    
+        allowNull: true,
         field: "fixed_payment_month_year",
       },
       fixedPaymentReceivedOrNot: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false,    
+        defaultValue: false,
         field: "fixed_payment_received_or_not",
       },
       NMVPaymentAmount: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
-        allowNull: true,    
+        allowNull: true,
         field: "nmv_payment_amount",
       },
       NMVPaymentMonthYear: {
         type: DataTypes.DATEONLY,
-        allowNull: true,    
+        allowNull: true,
         field: "nmv_payment_month_year",
       },
       NMVPaymentReceivedOrNot: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false,    
+        defaultValue: false,
         field: "nmv_payment_received_or_not",
       },
       createdAt: {
@@ -186,7 +186,7 @@ const PartnerAddedSellers = (sequelize: Sequelize, DataTypes: any) => {
       freezeTableName: true,
       underscored: true,
       timestamps: true,
-    }
+    },
   );
   return PartnerAddedSellers;
 };

@@ -181,7 +181,7 @@ router.post(
     usersAllowed: [],
   }),
   userController.registerUser.validation,
-  userController.registerUser.handler
+  userController.registerUser.handler,
 );
 
 //? POST
@@ -248,7 +248,7 @@ router.post(
     usersAllowed: [],
   }),
   userController.loginUser.validation,
-  userController.loginUser.handler
+  userController.loginUser.handler,
 );
 
 //? PUT
@@ -298,7 +298,7 @@ router.post(
  *                  example: FUL-IND-774512
  *                pickupAddress:
  *                  type: string
- *                  example: Warehouse No. 12, Bhiwandi Logistics Park, Thane, Maharashtra - 421302 
+ *                  example: Warehouse No. 12, Bhiwandi Logistics Park, Thane, Maharashtra - 421302
  *                businessType:
  *                  type: string
  *                  example: Manufacturer
@@ -343,7 +343,7 @@ router.put(
     usersAllowed: [enums.ROLE.PARTNER, enums.ROLE.SELLER],
   }),
   userController.updateUser.validation,
-  userController.updateUser.handler
+  userController.updateUser.handler,
 );
 
 //? GET
@@ -395,6 +395,24 @@ router.put(
  *                      email:
  *                        type: string
  *                        example: "john.doe@example.com"
+ *                      role:
+ *                        type: string
+ *                        example: partner
+ *                      isOnboardingCompleted:
+ *                        type: boolean
+ *                        example: true
+ *                      totalFixedPayment:
+ *                        type: number
+ *                        example: 3000
+ *                      totalNMVPayment:
+ *                        type: number
+ *                        example: 0
+ *                      finalPayout:
+ *                        type: number
+ *                        example: 3000
+ *                      razorpayCustomerId:
+ *                        type: string
+ *                        example: cust_S7GuWAOrpwOsJq
  *                      phoneNumber:
  *                        type: string
  *                        example: "9977665544"
@@ -417,121 +435,151 @@ router.put(
  *                        properties:
  *                            id:
  *                              type: string
- *                              example: 96ad270b-87f5-49b3-abed-a190ec46559d                        
+ *                              example: 96ad270b-87f5-49b3-abed-a190ec46559d
  *                            userId:
  *                              type: string
- *                              example: a9201deb-ca29-476f-99f8-2e740f4639ca                        
+ *                              example: a9201deb-ca29-476f-99f8-2e740f4639ca
  *                            businessName:
  *                              type: string
- *                              example: Doe Manufacturing India Pvt Ltd                       
+ *                              example: Doe Manufacturing India Pvt Ltd
  *                            gstNumber:
  *                              type: string
- *                              example: 27ABCDE1234F1Z5                         
+ *                              example: 27ABCDE1234F1Z5
  *                            gstAddress:
  *                              type: string
- *                              example: Plot No. 45, MIDC Industrial Area, Andheri East, Mumbai, Maharashtra - 400093                         
+ *                              example: Plot No. 45, MIDC Industrial Area, Andheri East, Mumbai, Maharashtra - 400093
  *                            manufacturerNumber:
  *                              type: string
- *                              example: MFG-IND-458921                         
+ *                              example: MFG-IND-458921
  *                            fullFillerNumber:
  *                              type: string
- *                              example: FUL-IND-774512                        
+ *                              example: FUL-IND-774512
  *                            pickupAddress:
  *                              type: string
- *                              example: Warehouse No. 12, Bhiwandi Logistics Park, Thane, Maharashtra - 421302                         
+ *                              example: Warehouse No. 12, Bhiwandi Logistics Park, Thane, Maharashtra - 421302
  *                            businessType:
  *                              type: string
- *                              example: Manufacturer                         
+ *                              example: Manufacturer
  *                            pancardNumber:
  *                              type: string
- *                              example: ABCDE1234F                         
+ *                              example: ABCDE1234F
  *                            managerPhoneNumber:
  *                              type: string
- *                              example: "9995556663"                        
+ *                              example: "9995556663"
  *                            managerEmail:
  *                              type: string
- *                              example: manager@gmail.com                         
+ *                              example: manager@gmail.com
  *                            createdAt:
  *                              type: string
- *                              example: 2026-01-15T17:10:47.201Z                         
+ *                              example: 2026-01-15T17:10:47.201Z
  *                            updatedAt:
  *                              type: string
- *                              example: 2026-01-15T17:10:47.201Z                        
+ *                              example: 2026-01-15T17:10:47.201Z
  *                      userSubscriptions:
  *                        type: object
  *                        properties:
  *                            id:
  *                              type: string
- *                              example: 96ad270b-87f5-49b3-abed-a190ec41529d                        
+ *                              example: 96ad270b-87f5-49b3-abed-a190ec41529d
  *                            userId:
  *                              type: string
- *                              example: a9201deb-ca29-476f-99f8-2e740f4639ca                        
+ *                              example: a9201deb-ca29-476f-99f8-2e740f4639ca
  *                            subscriptionPlanId:
  *                              type: string
- *                              example: a426f61e-ea09-4bea-9b87-163f766d6303                       
+ *                              example: a426f61e-ea09-4bea-9b87-163f766d6303
  *                            razorpaySubscriptionId:
  *                              type: string
- *                              example: sub_S7SrQkjwbyhFBW                         
+ *                              example: sub_S7SrQkjwbyhFBW
  *                            razorpayPlanId:
  *                              type: string
- *                              example: plan_S7FPZXIdNebDx0                         
+ *                              example: plan_S7FPZXIdNebDx0
  *                            status:
  *                              type: string
- *                              example: active                         
+ *                              example: active
  *                            currentPeriodStart:
  *                              type: string
- *                              example: 2026-01-23T21:14:26.000Z                        
+ *                              example: 2026-01-23T21:14:26.000Z
  *                            currentPeriodEnd:
  *                              type: string
- *                              example: 2026-02-23T18:30:00.000Z                         
+ *                              example: 2026-02-23T18:30:00.000Z
  *                            createdAt:
  *                              type: string
- *                              example: 2026-01-15T17:10:47.201Z                         
+ *                              example: 2026-01-15T17:10:47.201Z
  *                            updatedAt:
  *                              type: string
- *                              example: 2026-01-15T17:10:47.201Z                        
+ *                              example: 2026-01-15T17:10:47.201Z
  *                            subscriptionPlanDetails:
  *                              type: object
  *                              properties:
  *                                  id:
  *                                    type: string
- *                                    example: 96ad270b-87f5-49b3-abed-a190e141519d                        
+ *                                    example: 96ad270b-87f5-49b3-abed-a190e141519d
  *                                  planName:
  *                                    type: string
- *                                    example: Seller Special                        
+ *                                    example: Seller Special
  *                                  planDescription:
  *                                    type: string
- *                                    example: Basic tools to handle daily billing, inventory visibility, and bank settlements.                       
+ *                                    example: Basic tools to handle daily billing, inventory visibility, and bank settlements.
  *                                  planType:
  *                                    type: string
- *                                    example: monthly                         
+ *                                    example: monthly
  *                                  planTypeMonths:
  *                                    type: string
- *                                    example: 1                         
+ *                                    example: 1
  *                                  isPopular:
  *                                    type: string
- *                                    example: false                         
+ *                                    example: false
  *                                  discountInPercentage:
  *                                    type: string
- *                                    example: 0                   
+ *                                    example: 0
  *                                  price:
  *                                    type: number
- *                                    example: 1999                          
+ *                                    example: 1999
  *                                  displayOrder:
  *                                    type: number
- *                                    example: 1                          
+ *                                    example: 1
  *                                  userType:
  *                                    type: string
- *                                    example: seller                        
+ *                                    example: seller
  *                                  razorpayPlanId:
  *                                    type: string
- *                                    example: plan_S7FPZXIdNebDx0                        
+ *                                    example: plan_S7FPZXIdNebDx0
  *                                  createdAt:
  *                                    type: string
- *                                    example: 2026-01-15T17:10:47.201Z                         
+ *                                    example: 2026-01-15T17:10:47.201Z
  *                                  updatedAt:
  *                                    type: string
- *                                    example: 2026-01-15T17:10:47.201Z                        
+ *                                    example: 2026-01-15T17:10:47.201Z
+ *                      totalOrders:
+ *                        type: number
+ *                        example: 3
+ *                      totalGMV:
+ *                        type: number
+ *                        example: 1995
+ *                      pendingAcceptance:
+ *                        type: number
+ *                        example: 1
+ *                      myPayment:
+ *                        type: number
+ *                        example: 85500
+ *                      problematicOrder:
+ *                        type: number
+ *                        example: 0
+ *                      cancelledBySellers:
+ *                        type: number
+ *                        example: 3
+ *                      highReturn:
+ *                        type: number
+ *                        example: 3
+ *                      InactiveSellers:
+ *                        type: number
+ *                        example: 0
+ *                      returnOrders:
+ *                        type: number
+ *                        example: 1
+ *                      returnOrderPercentage:
+ *                        type: number
+ *                        example: 33.33333333333333
  */
 //* Fetch logged in User API
 router.get(
@@ -541,7 +589,7 @@ router.get(
     usersAllowed: [enums.ROLE.PARTNER, enums.ROLE.SELLER],
   }),
   userController.getLoggedInUserDetails.validation,
-  userController.getLoggedInUserDetails.handler
+  userController.getLoggedInUserDetails.handler,
 );
 
 export default router;

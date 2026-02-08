@@ -9,8 +9,17 @@ const UserSubscriptions = (sequelize: Sequelize, DataTypes: any) => {
     public razorpaySubscriptionId!: string;
     public razorpayPlanId!: string;
     public status!: string;
+    public totalCount!: number;
+    public billingInterval!: string;
+    public paidCount!: number;
+    public remainingCount!: number;
+    public cancelledAt!: string;
+    public completedAt!: string;
+    public haltedAt!: string;
     public currentPeriodStart!: string;
-    public currentPeriodEnd!: number;
+    public currentPeriodEnd!: string;
+    public startAt!: string;
+    public endAt!: string;
     public createdAt!: Date;
     public updatedAt!: Date | null;
 
@@ -42,8 +51,8 @@ const UserSubscriptions = (sequelize: Sequelize, DataTypes: any) => {
         allowNull: false,
         references: {
           model: "users",
-          key: "id"
-        }
+          key: "id",
+        },
       },
       subscriptionPlanId: {
         type: DataTypes.UUID,
@@ -51,9 +60,15 @@ const UserSubscriptions = (sequelize: Sequelize, DataTypes: any) => {
         allowNull: false,
         references: {
           model: "subscription_plans",
-          key: "id"
-        }
+          key: "id",
+        },
       },
+      billingInterval: {
+        type: DataTypes.ENUM("monthly", "quarterly", "yearly", "half-yearly"),
+        field: "billing_interval",
+        allowNull: true,
+      },
+
       razorpaySubscriptionId: {
         type: DataTypes.STRING,
         field: "razorpay_subscription_id",
@@ -65,7 +80,14 @@ const UserSubscriptions = (sequelize: Sequelize, DataTypes: any) => {
         allowNull: false,
       },
       status: {
-        type: DataTypes.ENUM("created", "pending_confirmation", "active", "completed", "cancelled", "failed"),
+        type: DataTypes.ENUM(
+          "created",
+          // "pending_confirmation",
+          "active",
+          "halted",
+          "completed",
+          "cancelled",
+        ),
         field: "status",
         allowNull: false,
       },
@@ -77,6 +99,49 @@ const UserSubscriptions = (sequelize: Sequelize, DataTypes: any) => {
       currentPeriodEnd: {
         type: DataTypes.DATE,
         field: "current_period_end",
+        allowNull: true,
+      },
+      startAt: {
+        type: DataTypes.DATE,
+        field: "start_at",
+        allowNull: true,
+      },
+      endAt: {
+        type: DataTypes.DATE,
+        field: "end_at",
+        allowNull: true,
+      },
+      totalCount: {
+        type: DataTypes.INTEGER,
+        field: "total_count",
+        allowNull: true,
+        defaultValue: 0,
+      },
+      paidCount: {
+        type: DataTypes.INTEGER,
+        field: "paid_count",
+        allowNull: true,
+        defaultValue: 0,
+      },
+      remainingCount: {
+        type: DataTypes.INTEGER,
+        field: "remaining_count",
+        allowNull: true,
+        defaultValue: 0,
+      },
+      cancelledAt: {
+        type: DataTypes.DATE,
+        field: "cancelled_at",
+        allowNull: true,
+      },
+      completedAt: {
+        type: DataTypes.DATE,
+        field: "completed_at",
+        allowNull: true,
+      },
+      haltedAt: {
+        type: DataTypes.DATE,
+        field: "halted_at",
         allowNull: true,
       },
       createdAt: {
@@ -97,7 +162,7 @@ const UserSubscriptions = (sequelize: Sequelize, DataTypes: any) => {
       freezeTableName: true,
       underscored: true,
       timestamps: true,
-    }
+    },
   );
   return UserSubscriptions;
 };

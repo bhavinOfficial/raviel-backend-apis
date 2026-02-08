@@ -9,19 +9,29 @@ const userSubscriptionRepository = {
   fetchUserSubscription: async (razorpaySubscriptionId: string) => {
     return await db.UserSubscriptions.findOne({
       where: {
-        razorpaySubscriptionId
+        razorpaySubscriptionId,
       },
-      raw: true
+      raw: true,
     });
   },
 
-  updateUserSubscription: async (dataToUpdate: any, userSubscriptionId: string) => {
+  updateUserSubscription: async (
+    dataToUpdate: any,
+    userSubscriptionId: string,
+  ) => {
     return await db.UserSubscriptions.update(dataToUpdate, {
       where: {
-        id: userSubscriptionId
+        id: userSubscriptionId,
       },
       raw: true,
-      returning: true
+      returning: true,
+    });
+  },
+
+  upsertUserSubscription: async (dataToUpdate: any) => {
+    return await db.UserSubscriptions.update(dataToUpdate, {
+      conflictFields: ["id"],
+      returning: true,
     });
   },
 };

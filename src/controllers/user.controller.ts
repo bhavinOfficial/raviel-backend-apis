@@ -93,26 +93,34 @@ const userController = {
           .pattern(/^\d{10}$/)
           .required()
           .messages({
-            "string.pattern.base": "Phone number number must be exactly 10 digits",
+            "string.pattern.base":
+              "Phone number number must be exactly 10 digits",
           }),
         businessName: Joi.string().optional(),
-        gstNumber: Joi.string().pattern(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/)
+        gstNumber: Joi.string()
+          .pattern(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/)
           .messages({
             "string.pattern.base": "Invalid GST number format",
-          }).optional(),
+          })
+          .optional(),
         gstAddress: Joi.string().optional(),
         manufacturerNumber: Joi.string().optional(),
         fullFillerNumber: Joi.string().optional(),
         pickupAddress: Joi.string().optional(),
         businessType: Joi.string().optional(),
-        pancardNumber: Joi.string().pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)
+        pancardNumber: Joi.string()
+          .pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)
           .messages({
             "string.pattern.base": "Invalid PAN card number format",
-          }).optional(),
-        managerPhoneNumber: Joi.string().pattern(/^\d{10}$/)
+          })
+          .optional(),
+        managerPhoneNumber: Joi.string()
+          .pattern(/^\d{10}$/)
           .messages({
             "string.pattern.base": "Invalid manager phone number format",
-          }).allow("", null).optional(),
+          })
+          .allow("", null)
+          .optional(),
         managerEmail: Joi.string().email().allow("", null).optional(),
       }),
     }),

@@ -1,13 +1,12 @@
 import { Sequelize, DataTypes, Model } from "sequelize";
 import { enums } from "../common/constants";
-import { alternatives } from "joi";
 import db from "../models/index";
 type UUID = string & { readonly __brand: unique symbol };
 
 const PartnerSellersOrders = (sequelize: Sequelize, DataTypes: any) => {
   class PartnerSellersOrders extends Model {
     public id!: UUID;
-    public sellerId!: string;
+    public sellerrId!: UUID;
     public orderCreatedDate!: string;
     public orderId!: string;
     public shipmentId!: string;
@@ -19,13 +18,12 @@ const PartnerSellersOrders = (sequelize: Sequelize, DataTypes: any) => {
     public createdAt!: Date;
     public updatedAt!: Date | null;
 
-
     static associate(models: any) {
       //* define association here
-      //   User.belongsTo(models.Role, {
-      //     foreignKey: "role_id",
-      //     as: "role",
-      //   });
+      PartnerSellersOrders.belongsTo(models.PartnerAddedSellers, {
+        foreignKey: "sellerrId",
+        as: "sellerDetails",
+      });
     }
   }
 
@@ -36,14 +34,14 @@ const PartnerSellersOrders = (sequelize: Sequelize, DataTypes: any) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      sellerId: {
+      sellerrId: {
         type: DataTypes.UUID,
-        field: "seller_id",
+        field: "sellerr_id",
         allowNull: false,
         references: {
           model: "partner_added_sellers",
-          key: "seller_id"
-        }
+          key: "id",
+        },
       },
       orderCreatedDate: {
         type: DataTypes.DATEONLY,
@@ -61,7 +59,30 @@ const PartnerSellersOrders = (sequelize: Sequelize, DataTypes: any) => {
         allowNull: true,
       },
       shipmentStatus: {
-        type: DataTypes.ENUM("DELIVERED", "CUSTOMER CANCELLED", "CANCELLED", "SELLER CANCELLED", "RETURNED", "REFUNDED", "RTO INITIATED", "RTO IN TRANSIT", "RTO COMPLETED", "PLACED", "SELLER PROCESSING", "BAG_PACKED", "BAG_PICKED", "DP_ASSIGNED", "OUT_FOR_PICKUP", "IN TRANSIT", "OUT FOR DELIVERY", "DELIVERY ATTEMPTED", "EDD_UPDATED", "BAG_PICK_FAILED", "REJECTED_BY_CUSTOMER", "BAG_LOST"),
+        type: DataTypes.ENUM(
+          "DELIVERED",
+          "CUSTOMER CANCELLED",
+          "CANCELLED",
+          "SELLER CANCELLED",
+          "RETURNED",
+          "REFUNDED",
+          "RTO INITIATED",
+          "RTO IN TRANSIT",
+          "RTO COMPLETED",
+          "PLACED",
+          "SELLER PROCESSING",
+          "BAG_PICKED",
+          "BAG_PACKED",
+          "DP_ASSIGNED",
+          "OUT_FOR_PICKUP",
+          "IN TRANSIT",
+          "OUT FOR DELIVERY",
+          "DELIVERY ATTEMPTED",
+          "EDD_UPDATED",
+          "BAG_PICK_FAILED",
+          "REJECTED_BY_CUSTOMER",
+          "BAG_LOST",
+        ),
         field: "shipment_status",
         allowNull: true,
       },
@@ -71,7 +92,12 @@ const PartnerSellersOrders = (sequelize: Sequelize, DataTypes: any) => {
         allowNull: false,
       },
       deliveryPartner: {
-        type: DataTypes.ENUM("xpressbees_jio", "delhivery_jio", "shadowfax_jio"),
+        type: DataTypes.ENUM(
+          "xpressbees_jio",
+          "delhivery_jio",
+          "shadowfax_jio",
+          "",
+        ),
         field: "delivery_partner",
         allowNull: true,
       },
@@ -108,10 +134,10 @@ const PartnerSellersOrders = (sequelize: Sequelize, DataTypes: any) => {
         {
           unique: true,
           name: "uniq_order",
-          fields: ["seller_id", "order_id", "shipment_id"],
+          fields: ["sellerr_id", "order_id", "shipment_id"],
         },
       ],
-    }
+    },
   );
   return PartnerSellersOrders;
 };

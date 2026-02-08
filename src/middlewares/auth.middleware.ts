@@ -21,16 +21,20 @@ export interface User {
   updatedAt: Date;
 }
 
-const auth = ({ isTokenRequired = true, usersAllowed = [] }: AuthOptions) => {
+const auth = ({ isTokenRequired = false, usersAllowed = [] }: AuthOptions) => {
   return async (
     req: Request & { user?: { id: string; role: string; email: string } },
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     //* get token from request header and remove Bearer from it
     // const token = (
     //   req.header("x-auth-token") || req.header("Authorization")
     // )?.replace(/Bearer +/g, "");
+
+    //* check if token is not required and token is present in the request header or not
+    // if (!isTokenRequired && !token) return next();
+    if (!isTokenRequired) return next();
 
     const token = (
       req.cookies?.accessToken ||
@@ -51,9 +55,6 @@ const auth = ({ isTokenRequired = true, usersAllowed = [] }: AuthOptions) => {
         res,
         message: "Access denied. No token provided.",
       });
-
-    //* check if token is not required and token is present in the request header or not
-    if (!isTokenRequired && !token) return next();
 
     //* decode token and get user details from it
     let decoded: any = await helper.decodeToken({ token });
@@ -77,22 +78,22 @@ const auth = ({ isTokenRequired = true, usersAllowed = [] }: AuthOptions) => {
       where: { id: decoded.id },
       raw: true,
     });
-    
+
     //* check if user is present in the database or not
     if (!user)
       return ApiResponse.UNAUTHORIZED({
-    res,
-    message: "Access denied. Invalid token.",
-  });
-  
-  //* check if user is active or not
-  if (!user.isActive)
-    return ApiResponse.UNAUTHORIZED({
-  res,
-  message: "Access denied. User is not active.",
-});
+        res,
+        message: "Access denied. Invalid token.",
+      });
 
-//* Make user object and assign user details to it
+    //* check if user is active or not
+    if (!user.isActive)
+      return ApiResponse.UNAUTHORIZED({
+        res,
+        message: "Access denied. User is not active.",
+      });
+
+    //* Make user object and assign user details to it
     req.user = user;
     // {
     //   id: user.id,

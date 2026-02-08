@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import JWT from "jsonwebtoken";
 import { JwtToken } from "../../types/helper.interface";
 import config from "../../config/env.config";
+import fs from "fs";
 // const ALGORITHM = "aes-256-cbc";
 // const SECRET = process.env.CRYPTO_SECRET!;
 const SECRET = config.crypto_secret_key;
@@ -32,7 +33,10 @@ const helper = {
   //? Make generate JWT token function
   generateToken: async ({ data }: { data: JwtToken }) => {
     //* Make generate token function
-    const token = await JWT.sign(data, config.jwt.secret /*, { expiresIn: "7d" } */);
+    const token = await JWT.sign(
+      data,
+      config.jwt.secret /*, { expiresIn: "7d" } */,
+    );
     return token;
   },
 
@@ -41,6 +45,18 @@ const helper = {
     //* Make decode token function
     const decoded = await JWT.verify(token, config.jwt.secret);
     return decoded;
+  },
+
+  deleteLocalFile: (filePath?: string) => {
+    if (!filePath) return;
+
+    if (fs.existsSync(filePath)) {
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error("Failed to delete file:", err);
+        }
+      });
+    }
   },
 
   //? Compare hash password function
@@ -95,8 +111,7 @@ const helper = {
     });
 
     return result;
-  }
-
+  },
 
   //   //* Send email using sendGrid
   //   sendMail: async ({ to, otp }: { to: string; otp: number }) => {
